@@ -30,6 +30,7 @@
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
+    "@typescript-eslint/no-empty-function": "off",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
     "no-unused-expressions": "off",
