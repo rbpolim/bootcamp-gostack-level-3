@@ -14,6 +14,9 @@ import * as Yup from 'yup';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+
+import { useAuth } from '../../hooks/auth';
+
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
@@ -41,14 +44,16 @@ const SignIn: React.FC = () => {
 
   const navigation = useNavigation();
 
+  const { signIn } = useAuth();
+
   const handleSignIn = useCallback(async (data: SignInFormData) => {
     try {
       formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
         email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um e-mail válido'),
+        .email('Digite um e-mail válido')
+        .required('E-mail obrigatório'),
         password: Yup.string().required('Senha obrigatória'),
       });
 
@@ -56,12 +61,12 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      // await signIn({
-      //   email: data.email,
-      //   password: data.password,
-      // });
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
 
-      // history.push('/dashboard');
+
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
@@ -76,7 +81,7 @@ const SignIn: React.FC = () => {
         'Ocorreu um erro ao fazer login. Cheque as credenciais.',
       );
     }
-  }, []);
+  }, [signIn]);
 
   return (
     <>
